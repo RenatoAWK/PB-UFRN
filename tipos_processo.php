@@ -37,6 +37,32 @@
     </head>
     <body>
 
+        <nav class="navbar navbar-expand-lg navbar-light bg-light" style="height: 70px;">
+                <a class="navbar-brand" style="margin-left: 550px;" href="index.php">Case One <span class="sr-only">(current)</span></a>
+                <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+                <div class="collapse navbar-collapse" id="navbarNav">
+                    <ul class="navbar-nav">
+                        <li class="nav-item active">
+                            <a class="nav-link" href="index_tipos_processo.php">Case two <span class="sr-only"></span></a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link disabled" href="#" tabindex="-1" aria-disabled="true">Case three</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link disabled" href="#" tabindex="-1" aria-disabled="true">Case Four</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link disabled" href="#" tabindex="-1" aria-disabled="true">Case Five</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link disabled" href="#" tabindex="-1" aria-disabled="true">Case Six   </a>
+                        </li>
+                    </ul>
+                </div>
+        </nav>
+
         <div class="container" style="max-width: 1650px;">
         
             <div class="filtros" style=" margin-top: 100px;">
@@ -59,7 +85,6 @@
 
                         <option value="tipo" >Alfabetica - Tipo</option>
                         <option value="assunto" >Alfabetica - Assunto</option>
-                        <option value="Ano">Ano</option>
                         <option value="Quantidade">Quantidade</option>
 
                     </select>
@@ -84,7 +109,7 @@
 
                     ?>
  
-                    <option value="ano"><?php echo $ano ?></option>
+                    <option ><?php echo $ano ?></option>
 
                     <?php } ?>
 
@@ -117,7 +142,7 @@
 
                         <th scope="col">Tipo</th>
                         <th scope="col">Assunto</th>
-                        <th scope="col">Qualidade</th>
+                        <th scope="col">Ano</th>
                         <th scope="col">Quantidade</th>
 
                     </tr>

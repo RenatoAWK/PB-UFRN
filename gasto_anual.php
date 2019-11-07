@@ -7,21 +7,8 @@
     $sort = $_POST['sort'];
     $ordem = $_POST['ordem'];
 
-    if($group_get != "nenhum"){
-        $group = "GROUP BY $group_get";  
-    }else{
-        $group = "";
-    }
-
+    $group = "GROUP BY $group_get";  
     $having = "HAVING anoprocesso = $ano";
-    if($ordem == "valor"){
-        $ordem = "valor";
-    }
-    elseif($group_get == "nomeunidade"){
-        $ordem = "nomeunidade";
-    }else{
-        $ordem = "naturezanome";
-    }
     $orderBy = "ORDER BY $ordem $sort";
 ?>
 
@@ -47,6 +34,32 @@
     </head>
     <body>
 
+        <nav class="navbar navbar-expand-lg navbar-light bg-light" style="height: 70px;">
+                <a class="navbar-brand" style="margin-left: 550px;" href="index.php">Case One <span class="sr-only">(current)</span></a>
+                <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+                <div class="collapse navbar-collapse" id="navbarNav">
+                    <ul class="navbar-nav">
+                        <li class="nav-item active">
+                            <a class="nav-link" href="index_tipos_processo.php">Case two <span class="sr-only"></span></a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link disabled" href="#" tabindex="-1" aria-disabled="true">Case three</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link disabled" href="#" tabindex="-1" aria-disabled="true">Case Four</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link disabled" href="#" tabindex="-1" aria-disabled="true">Case Five</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link disabled" href="#" tabindex="-1" aria-disabled="true">Case Six   </a>
+                        </li>
+                    </ul>
+                </div>
+        </nav>
+
         <div class="container" style="max-width: 1650px;">
         
             <div class="filtros" style=" margin-top: 100px;">
@@ -65,7 +78,8 @@
                     <label>Ordem:</label> 
                     <select class="form-control text"  name="ordem" >
 
-                        <option value="nomeunidade" >Alfabetica</option>
+                        <option value="nomeunidade" >Alfabetica - municipio</option>
+                        <option value="naturezanome" >Alfabetica - natureza</option>
                         <option value="valor">Valor</option>
 
                     </select>

@@ -66,7 +66,8 @@
                     <label>Ordem:</label> 
                     <select class="form-control text"  name="ordem" >
 
-                        <option value="nomeunidade" >Alfabetica</option>
+                        <option value="nomeunidade" >Alfabetica - municipio</option>
+                        <option value="naturezanome" >Alfabetica - natureza</option>
                         <option value="valor">Valor</option>
 
                     </select>
