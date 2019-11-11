@@ -1,10 +1,34 @@
+<?php 
+
+    include 'conexao.php';
+
+    $group_get = $_POST['group'];
+    $ano = $_POST['ano'];
+    $sort = $_POST['sort'];
+    $ordem = $_POST['ordem'];
+
+    if($group_ge == "nenhum"){
+        
+        $group = ""; 
+        $valor = "empenho.valor_empenho as valor, empenho.saldo_empenho as saldo, 
+                  (empenho.valor_empenho - empenho.saldo_empenho) as diferenca";  
+    }else{
+        
+        $group = "GROUP BY $group_get";
+        $valor = "SUM(empenho.valor_empenho) as valor, SUM(empenho.saldo_empenho) as saldo, 
+                  (SUM(empenho.valor_empenho) - SUM(empenho.saldo_empenho)) as diferenca";  
+    }
+    $having = "ano = $ano";
+    $orderBy = "ORDER BY $ordem $sort";
+?>
+
 <!DOCTYPE html>
 <html lang="pt">
     <head>
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <meta http-equiv="X-UA-Compatible" content="ie=edge">
-        <title>Case one</title>
+        <title>Case three</title>
 
         <link rel="stylesheet"  href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" 
                                 integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" 
@@ -91,13 +115,14 @@
             <div class="filtros" style=" margin-top: 20px;">
         
 
-                <form action="gasto_anual.php" method="post" style="display:flex; margin-left: 300px">
+                <form action="valor_saldo.php" method="post" style="display:flex; margin-left: 300px">
 
                 <div class="form-group" style="">
                     <label>Agrupar po:</label> 
                     <select class="form-control text"  name="group" >
-                        <option value="assunto">Assunto</option>
-                        <option value="tipo">Tipo</option>
+                        <option value="nenhum">Nenhum</option>
+                        <option value="credor">credor</option>
+                        <option value="natureza">natureza</option>
 
                     </select>
                 </div>
@@ -106,9 +131,11 @@
                     <label>Ordem:</label> 
                     <select class="form-control text"  name="ordem" >
 
-                        <option value="nomeunidade" >Alfabetica - Assunto  </option>
-                        <option value="naturezanome" >Alfabetica - Tipo</option>
+                        <option value="credor" >Alfabetica - credor</option>
+                        <option value="natureza" >Alfabetica - natureza</option>
                         <option value="valor">Valor</option>
+                        <option value="saldo">saldo</option>
+                        <option value="diferenca">diferenca</option>
 
                     </select>
 
@@ -118,10 +145,24 @@
                     <label>Ano:</label> 
                     <select class="form-control text"  name="ano" >
 
-                        <option >2015</option>
-                        <option >2016</option>
-                        <option >2017</option>
-                        <option >2018</option>
+                        <?php 
+                        include 'conexao.php';
+
+                        $sql = "SELECT DISTINCT empenho.ano as ano
+                        FROM  `empenho` as empenho";
+
+                        $busca = mysqli_query($conexao, $sql);
+
+                        while ($anos = mysqli_fetch_array($busca)){
+
+                            $ano = $anos['ano'];
+
+                        ?>
+    
+                        <option ><?php echo $ano ?></option>
+
+                        <?php } ?>
+
 
 
                     </select>
@@ -148,11 +189,11 @@
             <table class="table" style="margin-top: 50px;border-radius:15px; border: 2px solid #f3f3f3;" >
                 <thead class="black white-text"  style="background-color:#007bff; color: #fff">
                     <tr>
-                        <th scope="col">Nome</th>
-                        <th scope="col">Sigla</th>
-                        <th scope="col">Municipio</th>
-                        <th scope="col">valor</th>
-                        <th scope="col">natureza</th>
+                        <th scope="col">Credor</th>
+                        <th scope="col">Natureza</th>
+                        <th scope="col">Valor</th>
+                        <th scope="col">Saldo</th>
+                        <th scope="col">Diferença</th>
                         <th scope="col">Ano</th>
                     </tr>
                 </thead>
@@ -161,34 +202,31 @@
                     <?php 
                     include 'conexao.php';
 
-                    $sql = "SELECT municipio.nome as municipio,unidade.nome_unidade as nomeunidade, SUM(gastosporunidade.valor) as valor , naturezadespesa.natureza as natureza, unidade.sigla as sigla, processo.ano as anoprocesso
-                    FROM `municipio` as municipio JOIN `unidade` as unidade ON unidade.municipios_id_municipios = municipio.id_municipio 
-                          JOIN `gastosporunidade` as gastosporunidade ON gastosporunidade.unidade_id_unidade = unidade.id_unidade
-                          JOIN `gastosporunidade_e_naturezadespesa` as gastosporunidade_e_naturezadespesa ON gastosporunidade_e_naturezadespesa.gastos_por_unidade_id_gastos_por_unidade = gastosporunidade.id_gastos_por_unidade
-                          JOIN `naturezadespesa` as naturezadespesa ON naturezadespesa.id_natureza_despesa = gastosporunidade_e_naturezadespesa.natureza_despesa_id_natureza_despesa
-                          JOIN `empenho` as empenho ON empenho.unidade_id_unidade = unidade.id_unidade
-                          JOIN `processo`as processo ON empenho.processo_id_processo = processo.id_processo
-                          GROUP BY nomeunidade";
+                    $sql = "SELECT empenho.credor as credor, empenho.natureza as natureza,$valor, empenho.ano as ano FROM `empenho` as empenho
+                            $group
+                            HAVING valor > saldo AND $having
+                            $orderBy
+                            LIMIT 50";
 
                     $busca = mysqli_query($conexao, $sql);
 
-                    while ($unidades = mysqli_fetch_array($busca)){
+                    while ($empenhos = mysqli_fetch_array($busca)){
 
-                        $municipio = $unidades['municipio'];
-                        $nonomeunidademe = $unidades['nomeunidade'];
-                        $valor = $unidades['valor'];
-                        $natureza = $unidades['natureza'];
-                        $sigla = $unidades['sigla'];
-                        $ano = $unidades['anoprocesso'];
+                        $credor = $empenhos['credor'];
+                        $valor = $empenhos['valor'];
+                        $saldo = $empenhos['saldo'];
+                        $diferenca = $empenhos['diferenca'];
+                        $natureza = $empenhos['natureza'];
+                        $ano = $empenhos['ano'];
                     ?>
  
                     <tr>
-                        <td class="texto"><?php  echo $nonomeunidademe ?></td>              
-                        <td class="texto"><?php  echo $sigla ?></td>              
-                        <td class="texto"><?php  echo $municipio ?></td>              
-                        <td class="texto"><?php  echo $valor ?></td>              
+                        <td class="texto"><?php  echo $credor ?></td>              
                         <td class="texto"><?php  echo $natureza ?></td>              
-                        <td class="texto"><?php  echo $ano ?></td>              
+                        <td class="texto"><?php  echo $valor ?></td>              
+                        <td class="texto"><?php  echo $saldo ?></td>                         
+                        <td class="texto"><?php  echo $diferenca ?></td>                         
+                        <td class="texto"><?php  echo $ano ?></td>                         
                     </tr>
 
                     <?php } ?>

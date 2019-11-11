@@ -25,18 +25,20 @@ $cores = ["rgba(0,248,255,0.1)","rgba(25,25,112,0.5)","rgba(0,0,255,0.5)","rgba(
         "rgba(173,255,47,0.5)","rgba(255,255,0,0.5)","rgba(240,230,140,0.5)","rgba(218,165,32,0.5)","rgba(255,69,0,0.5)","rgba(255,165,0,0.5)","rgba(250,128,114,0.5)","rgba(255,0,0,0.5)","rgba(255,127,80,0.5)","rgba(128,0,0,0.5)","rgba(0,250,154,0.5)",
         "rgba(255,20,147,0.5)","rgba(220,220,220,0.8)","rgba(255,20,147,0.7)","rgba(0,255,0,0.7)","rgba(255,20,147,0.2)","rgba(255,0,0,0.6)","rgba(0,0,128,0.6)","rgba(192,192,192,0.6)","rgba(0,255,255,0.2)","rgba(0,255,0,0.2)","rgba(0,255,255,0.8)","rgba(220,220,220,0.5)","rgba(128,128,0,0.5)","rgba(0,0,128,0.4)",];
 
-$stmt = $dbcon -> prepare("SELECT empenho.credor as credor, SUM(empenho.valor_empenho) as valor, empenho.natureza as natureza, empenho.ano as ano FROM `empenho` as empenho
-                            GROUP BY $eixoX
-                            ORDER BY $eixoY $ordenacao
-                            LIMIT 5");
+$stmt = $dbcon -> prepare("SELECT tipoprocesso.tipo as tipo, processo.assunto as assunto, processo.ano as ano, empenho.valor_empenho as valor  FROM `processo` as processo 
+                           JOIN `tipoprocesso` as tipoprocesso ON processo.tipoProcesso_id_tipo_processo = tipoprocesso.id_tipo_processo 
+                           JOIN `empenho` as empenho ON empenho.processo_id_processo = processo.id_processo
+                           GROUP BY $eixoX
+                           ORDER BY $eixoY ASC
+                           LIMIT 7");
 $stmt -> execute();
 $json = [];
 while($row=$stmt->fetch(PDO::FETCH_ASSOC)){
     extract($row);
-    $credorList[] =  $credor;
+    $tipoList[] =  $tipo;
+    $assuntoList[] =  $assunto;
     $anoList[] =  $ano;
-    $naturezaList[] =  $natureza;
-    $json2[] =  (int)$valor;
+    $json2[] =  (double)$valor;
 }
 
 // echo json_encode($json);
@@ -49,7 +51,7 @@ while($row=$stmt->fetch(PDO::FETCH_ASSOC)){
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>Grafico Case 3</title>
+    <title>Grafico Case 6</title>
 
     <link rel="stylesheet"  href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" 
                             integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" 
@@ -122,20 +124,20 @@ while($row=$stmt->fetch(PDO::FETCH_ASSOC)){
         </ul>
     </div>
     </nav>
-    
+
     <div class="container" style="margin-top: 15px;">
 
 
         <div class="filtros">
 
-            <form action="grafico_case_3.php" method="post" style="display:flex; margin-left: 300px">
+            <form action="grafico_case_6.php" method="post" style="display:flex; margin-left: 300px">
 
                 <div class="form-group" style="">
                     <label>Eixo X:</label> 
                     <select class="form-control text"  name="eixoX" >
-                        <option value="credor" >Credor</option>
+                        <option value="tipo">Tipo</option>
+                        <option value="assunto">Assunto</option>
                         <option value="ano">Ano</option>
-                        <option value="natureza">natureza</option>
                     </select>
                 </div>
 
@@ -143,7 +145,6 @@ while($row=$stmt->fetch(PDO::FETCH_ASSOC)){
                     <label>Eixo Y:</label> 
                     <select class="form-control text"  name="eixoY" >
                         <option value="valor">valor</option>
-
                     </select>
 
                 </div>
@@ -193,13 +194,14 @@ while($row=$stmt->fetch(PDO::FETCH_ASSOC)){
 
                 // The data for our dataset
                 data: {
-                    labels:  <?php if($eixoX == "ano"){
-                                    echo json_encode($anoList);
-                                }elseif ($eixoX == "natureza") {
-                                    echo json_encode($naturezaList);
+                    labels:  <?php if($eixoX == "tipo"){
+                                    echo json_encode($tipoList);
+                                }elseif ($eixoX == "assunto") {
+                                    echo json_encode($assuntoList);
                                 }else{
-                                    echo json_encode($credorList);
+                                    echo json_encode($anoList);
                                 }?>,
+                    
                     datasets: [{
                         label: "Case 1",
                         backgroundColor: <?php echo json_encode($cores);?>,

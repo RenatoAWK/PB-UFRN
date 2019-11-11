@@ -34,7 +34,7 @@
     </head>
     <body>
 
-    <nav class="navbar navbar-expand-lg navbar-light bg-light">
+    <nav class="navbar navbar-expand-lg navbar-light bg-light" style="height: 100px;background: lavender !important;">
     <a class="navbar-brand" href="#">Casos de Uso</a>
     <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavDropdown" aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="Toggle navigation">
         <span class="navbar-toggler-icon"></span>
@@ -75,6 +75,24 @@
                 <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
                     <a class="dropdown-item" href="index_empenho_natureza.php">Listagem</a>
                     <a class="dropdown-item" href="index_grafico_case_4.php?eixoX=natureza&eixoY=valor&tipoGrafico=bar">Grafico</a>
+                </div>
+            </li>
+            <li class="nav-item dropdown">
+                <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                Caso Cinco
+                </a>
+                <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
+                    <a class="dropdown-item" href="index_valor_saldo.php">Listagem</a>
+                    <a class="dropdown-item" href="index_grafico_case_5.php?eixoX=credor&eixoY=diferenca&tipoGrafico=bar">Grafico</a>
+                </div>
+            </li>
+            <li class="nav-item dropdown">
+                <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                Caso Seis
+                </a>
+                <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
+                    <a class="dropdown-item" href="index_processos_acumulados.php">Listagem</a>
+                    <a class="dropdown-item" href="index_grafico_case_6.php?eixoX=tipo&eixoY=valor&tipoGrafico=bar">Grafico</a>
                 </div>
             </li>
             

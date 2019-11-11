@@ -1,10 +1,23 @@
+<?php 
+
+    include 'conexao.php';
+
+    $group_get = $_POST['group'];
+    $ano = $_POST['ano'];
+    $sort = $_POST['sort'];
+    $ordem = $_POST['ordem'];
+
+    $group = "GROUP BY $group_get";
+    $having = "HAVING ano = $ano";
+    $orderBy = "ORDER BY $ordem $sort";
+?>
 <!DOCTYPE html>
 <html lang="pt">
     <head>
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <meta http-equiv="X-UA-Compatible" content="ie=edge">
-        <title>Case one</title>
+        <title>Caso Seis</title>
 
         <link rel="stylesheet"  href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" 
                                 integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" 
@@ -85,19 +98,19 @@
         </ul>
     </div>
     </nav>
-        
+
         <div class="container" style="max-width: 1650px;">
         
-            <div class="filtros" style=" margin-top: 20px;">
+            <div class="filtros" style=" margin-top: 100px;">
         
 
-                <form action="gasto_anual.php" method="post" style="display:flex; margin-left: 300px">
+                <form action="processos_acumulados.php" method="post" style="display:flex; margin-left: 300px">
 
                 <div class="form-group" style="">
                     <label>Agrupar po:</label> 
                     <select class="form-control text"  name="group" >
+                        <option value="tipo" >Tipo</option>
                         <option value="assunto">Assunto</option>
-                        <option value="tipo">Tipo</option>
 
                     </select>
                 </div>
@@ -106,8 +119,9 @@
                     <label>Ordem:</label> 
                     <select class="form-control text"  name="ordem" >
 
-                        <option value="nomeunidade" >Alfabetica - Assunto  </option>
-                        <option value="naturezanome" >Alfabetica - Tipo</option>
+                        <option value="tipo" >Alfabetica - Tipo</option>
+                        <option value="assunto" >Alfabetica - Assunto</option>
+                        <option value="ano">Ano</option>
                         <option value="valor">Valor</option>
 
                     </select>
@@ -118,10 +132,24 @@
                     <label>Ano:</label> 
                     <select class="form-control text"  name="ano" >
 
-                        <option >2015</option>
-                        <option >2016</option>
-                        <option >2017</option>
-                        <option >2018</option>
+                    <?php 
+                    include 'conexao.php';
+
+                    $sql = "SELECT DISTINCT processo.ano as ano
+                    FROM  `processo` as processo";
+
+                    $busca = mysqli_query($conexao, $sql);
+
+                    while ($anos = mysqli_fetch_array($busca)){
+
+                        $ano = $anos['ano'];
+
+                    ?>
+ 
+                    <option ><?php echo $ano ?></option>
+
+                    <?php } ?>
+
 
 
                     </select>
@@ -148,47 +176,46 @@
             <table class="table" style="margin-top: 50px;border-radius:15px; border: 2px solid #f3f3f3;" >
                 <thead class="black white-text"  style="background-color:#007bff; color: #fff">
                     <tr>
-                        <th scope="col">Nome</th>
-                        <th scope="col">Sigla</th>
-                        <th scope="col">Municipio</th>
-                        <th scope="col">valor</th>
-                        <th scope="col">natureza</th>
+
+                        <th scope="col">Tipo</th>
+                        <th scope="col">Assunto</th>
                         <th scope="col">Ano</th>
+                        <th scope="col">Valor</th>
+
                     </tr>
                 </thead>
                 <tbody >
                     
                     <?php 
+
                     include 'conexao.php';
 
-                    $sql = "SELECT municipio.nome as municipio,unidade.nome_unidade as nomeunidade, SUM(gastosporunidade.valor) as valor , naturezadespesa.natureza as natureza, unidade.sigla as sigla, processo.ano as anoprocesso
-                    FROM `municipio` as municipio JOIN `unidade` as unidade ON unidade.municipios_id_municipios = municipio.id_municipio 
-                          JOIN `gastosporunidade` as gastosporunidade ON gastosporunidade.unidade_id_unidade = unidade.id_unidade
-                          JOIN `gastosporunidade_e_naturezadespesa` as gastosporunidade_e_naturezadespesa ON gastosporunidade_e_naturezadespesa.gastos_por_unidade_id_gastos_por_unidade = gastosporunidade.id_gastos_por_unidade
-                          JOIN `naturezadespesa` as naturezadespesa ON naturezadespesa.id_natureza_despesa = gastosporunidade_e_naturezadespesa.natureza_despesa_id_natureza_despesa
-                          JOIN `empenho` as empenho ON empenho.unidade_id_unidade = unidade.id_unidade
-                          JOIN `processo`as processo ON empenho.processo_id_processo = processo.id_processo
-                          GROUP BY nomeunidade";
+                    $sql = "SELECT tipoprocesso.tipo as tipo, processo.assunto as assunto, processo.ano as ano, SUM(empenho.valor_empenho) as valor  FROM `processo` as processo 
+                            JOIN `tipoprocesso` as tipoprocesso ON processo.tipoProcesso_id_tipo_processo = tipoprocesso.id_tipo_processo 
+                            JOIN `empenho` as empenho ON empenho.processo_id_processo = processo.id_processo
+                            $group
+                            $having
+                            $orderBy
+                            LIMIT 30
+                            ";
 
                     $busca = mysqli_query($conexao, $sql);
 
-                    while ($unidades = mysqli_fetch_array($busca)){
+                    while ($processos = mysqli_fetch_array($busca)){
 
-                        $municipio = $unidades['municipio'];
-                        $nonomeunidademe = $unidades['nomeunidade'];
-                        $valor = $unidades['valor'];
-                        $natureza = $unidades['natureza'];
-                        $sigla = $unidades['sigla'];
-                        $ano = $unidades['anoprocesso'];
+                        $tipo = $processos['tipo'];
+                        $assunto = $processos['assunto'];
+                        $ano = $processos['ano'];
+                        $valor = $processos['valor'];
+
                     ?>
  
                     <tr>
-                        <td class="texto"><?php  echo $nonomeunidademe ?></td>              
-                        <td class="texto"><?php  echo $sigla ?></td>              
-                        <td class="texto"><?php  echo $municipio ?></td>              
-                        <td class="texto"><?php  echo $valor ?></td>              
-                        <td class="texto"><?php  echo $natureza ?></td>              
+                        <td class="texto"><?php  echo $tipo ?></td>              
+                        <td class="texto"><?php  echo $assunto ?></td>              
                         <td class="texto"><?php  echo $ano ?></td>              
+                        <td class="texto"><?php  echo $valor ?></td>              
+            
                     </tr>
 
                     <?php } ?>
