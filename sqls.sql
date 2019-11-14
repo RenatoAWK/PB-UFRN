@@ -18,7 +18,7 @@ SELECT municipio.nome as municipio,unidade.nome_unidade as nomeunidade, SUM(gast
                           JOIN `gastosporunidade` as gastosporunidade ON gastosporunidade.unidade_id_unidade = unidade.id_unidade
                           JOIN `gastosporunidade_e_naturezadespesa` as gastosporunidade_e_naturezadespesa ON gastosporunidade_e_naturezadespesa.gastos_por_unidade_id_gastos_por_unidade = gastosporunidade.id_gastos_por_unidade
                           JOIN `naturezadespesa` as naturezadespesa ON naturezadespesa.id_natureza_despesa = gastosporunidade_e_naturezadespesa.natureza_despesa_id_natureza_despesa
-                            GROUP BY nomeunidade;
+                          GROUP BY nomeunidade;
 
 
 CASE 2

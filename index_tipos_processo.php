@@ -86,6 +86,11 @@
     </div>
     </nav>
 
+        <center style="margin-top: 15px">
+            <h4>Tipos de processos que mais aparecem</h4>
+        </center>
+        
+
         <div class="container" style="max-width: 1650px;">
         
             <div class="filtros" style=" margin-top: 100px;">
@@ -190,7 +195,7 @@
                         $tipo = $tipos['tipo'];
                         $assunto = $tipos['assunto'];
                         $ano = $tipos['ano'];
-                        $quantidade = $tipos['quantidade'];
+                        $quantidade = number_format( $tipos['quantidade']);
 
                     ?>
  

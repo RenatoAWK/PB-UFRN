@@ -100,6 +100,10 @@
         </ul>
     </div>
     </nav>
+
+        <center style="margin-top: 15px">
+            <h4>Maiores empenhos por natureza de empenho</h4>
+        </center>
     
         <div class="container" style="max-width: 1650px;">
         
@@ -187,14 +191,12 @@
                                 $having
                                 ORDER BY valor DESC, $orderBy";
 
-                    echo "$sql";
-
                     $busca = mysqli_query($conexao, $sql);
 
                     while ($empenhos = mysqli_fetch_array($busca)){
 
                         $credor = $empenhos['credor'];
-                        $valor = $empenhos['valor'];
+                        $valor = number_format( $empenhos['valor']);
                         $natureza = $empenhos['natureza'];
                         $ano = $empenhos['ano'];
                     ?>

@@ -100,6 +100,11 @@
     </div>
     </nav>
 
+        <center style="margin-top: 15px">
+            <h4>Gasto anual de cada unidade</h4>
+        </center>
+        
+
         <div class="container" style="max-width: 1650px;">
         
             <div class="filtros" style=" margin-top: 100px;">
@@ -191,7 +196,7 @@
 
                         $municipio = $unidades['municipio'];
                         $nonomeunidademe = $unidades['nomeunidade'];
-                        $valor = $unidades['valor'];
+                        $valor = number_format( $unidades['valor']);
                         $natureza = $unidades['naturezanome'];
                         $sigla = $unidades['sigla'];
                         $ano = $unidades['anoprocesso'];

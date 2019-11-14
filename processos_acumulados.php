@@ -99,6 +99,10 @@
     </div>
     </nav>
 
+        <center style="margin-top: 15px">
+            <h4>Processos com maiores valores acumulados</h4>
+        </center>
+
         <div class="container" style="max-width: 1650px;">
         
             <div class="filtros" style=" margin-top: 100px;">
@@ -206,7 +210,7 @@
                         $tipo = $processos['tipo'];
                         $assunto = $processos['assunto'];
                         $ano = $processos['ano'];
-                        $valor = $processos['valor'];
+                        $valor = number_format( $processos['valor']);
 
                     ?>
  

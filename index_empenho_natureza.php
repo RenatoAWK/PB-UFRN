@@ -85,6 +85,11 @@
         </ul>
     </div>
     </nav>
+
+        <center style="margin-top: 15px">
+            <h4>Maiores empenhos por natureza de empenho</h4>
+        </center>
+
         <div class="container" style="max-width: 1650px;">
         
             <div class="filtros" style=" margin-top: 20px;">
@@ -179,7 +184,7 @@
                     while ($empenhos = mysqli_fetch_array($busca)){
 
                         $credor = $empenhos['credor'];
-                        $valor = $empenhos['valor'];
+                        $valor = number_format( $empenhos['valor']);
                         $natureza = $empenhos['natureza'];
                         $ano = $empenhos['ano'];
                     ?>

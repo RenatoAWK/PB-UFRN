@@ -85,6 +85,10 @@
         </ul>
     </div>
     </nav>
+
+        <center style="margin-top: 15px">
+            <h4>Maiores valores de credores acumudalos</h4>
+        </center>
         
         <div class="container" style="max-width: 1650px;">
         
@@ -180,15 +184,15 @@
                     while ($credores = mysqli_fetch_array($busca)){
 
                         $credor = $credores['credor'];
-                        $valor = $credores['valor'];
+                        $valor = number_format( $credores['valor']);
                         $natureza = $credores['natureza'];
                         $ano = $credores['ano'];
                     ?>
  
                     <tr>
                         <td class="texto"><?php  echo $credor ?></td>              
-                        <td class="texto"><?php  echo $valor ?></td>              
                         <td class="texto"><?php  echo $natureza ?></td>              
+                        <td class="texto"><?php  echo $valor ?></td>              
                         <td class="texto"><?php  echo $ano ?></td>                         
                     </tr>
 

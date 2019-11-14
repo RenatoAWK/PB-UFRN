@@ -7,7 +7,7 @@
     $sort = $_POST['sort'];
     $ordem = $_POST['ordem'];
 
-    if($group_ge == "nenhum"){
+    if($group_get == "nenhum"){
         
         $group = ""; 
         $valor = "empenho.valor_empenho as valor, empenho.saldo_empenho as saldo, 
@@ -109,6 +109,10 @@
         </ul>
     </div>
     </nav>
+
+        <center style="margin-top: 15px">
+            <h4>Consultar se existem valores de empenho maiores que o saldo do empenho</h4>
+        </center>
         
         <div class="container" style="max-width: 1650px;">
         
@@ -213,9 +217,9 @@
                     while ($empenhos = mysqli_fetch_array($busca)){
 
                         $credor = $empenhos['credor'];
-                        $valor = $empenhos['valor'];
-                        $saldo = $empenhos['saldo'];
-                        $diferenca = $empenhos['diferenca'];
+                        $valor = number_format( $empenhos['valor']);
+                        $saldo = number_format( $empenhos['saldo']);
+                        $diferenca = number_format( $empenhos['diferenca']);
                         $natureza = $empenhos['natureza'];
                         $ano = $empenhos['ano'];
                     ?>
